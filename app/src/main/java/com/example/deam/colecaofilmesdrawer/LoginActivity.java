@@ -1,5 +1,6 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -32,8 +33,12 @@ public class LoginActivity extends AppCompatActivity {
     private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/verificaUsuario";
     private final String METHOD_NAME = "verificaUsuario";
 
+    SharedPreferences shared;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -41,6 +46,18 @@ public class LoginActivity extends AppCompatActivity {
         loginCadastro = (EditText) findViewById(R.id.loginCadastro);
         senhaCadastro = (EditText) findViewById(R.id.senhaCadastro);
 
+        shared = getPreferences(Context.MODE_PRIVATE);
+
+        try {
+            if (!shared.contains("primeiraVez")) {
+                //shared.edit().putBoolean("primeiraVez", true).apply();
+            } else {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                LoginActivity.this.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void novaConta(View v) {
@@ -69,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (retorno > 0) {
+                shared.edit().putBoolean("primeiraVez", true).apply();
                 Toast.makeText(LoginActivity.this, "Olá " + loginCadastro.getText().toString() + "!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
