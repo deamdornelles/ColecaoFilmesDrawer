@@ -8,6 +8,7 @@ public class Filme {
 
     String nome;
     int ano;
+    String nomeOriginal;
 
     public String getNome() {
         return nome;
@@ -23,6 +24,14 @@ public class Filme {
 
     public void setAno(int ano) {
         this.ano = ano;
+    }
+
+    public String getNomeOriginal() {
+        return nomeOriginal;
+    }
+
+    public void setNomeOriginal(String nomeOriginal) {
+        this.nomeOriginal = nomeOriginal;
     }
 
     @Override

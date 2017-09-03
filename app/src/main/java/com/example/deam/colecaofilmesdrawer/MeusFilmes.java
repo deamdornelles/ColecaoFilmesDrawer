@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -31,7 +33,6 @@ public class MeusFilmes extends Fragment {
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
     private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaFilme";
     private final String METHOD_NAME = "buscaFilme";
-    private static String retorno;
 
     ListView filmes;
     List<Filme> listaFilmes = new ArrayList<Filme>();
@@ -40,13 +41,35 @@ public class MeusFilmes extends Fragment {
 
     String usuario;
 
+    Fragment fragment = null;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Meus Filmes");
 
+        fragment = new FilmeDetalhes();
+
         filmes = (ListView) getView().findViewById(R.id.filmes);
         filmes.setEmptyView(getView().findViewById(R.id.empty_list_item));
+
+        filmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                Filme filme = (Filme) parent.getItemAtPosition(position);
+
+                Bundle args = new Bundle();
+                args.putString("nome", filme.getNome());
+                args.putString("nomeOriginal", filme.getNomeOriginal());
+                fragment.setArguments(args);
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.content_main, fragment).addToBackStack(null);
+                ft.commit();
+            }
+        });
 
         AsyncCallWS task = new AsyncCallWS();
         task.execute();
@@ -66,6 +89,7 @@ public class MeusFilmes extends Fragment {
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
+
             getResposta();
             return null;
         }
@@ -74,11 +98,14 @@ public class MeusFilmes extends Fragment {
         protected void onPostExecute(Void result) {
             ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             filmes.setAdapter(arrayAdapter);
+
+            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            //filmes.setAdapter(adapter);
+
         }
 
         @Override
         protected void onPreExecute() {
-
         }
 
         @Override
@@ -96,6 +123,8 @@ public class MeusFilmes extends Fragment {
             login.setType((String.class));
             request.addProperty(login);
 
+            listaFilmes.clear();
+
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
@@ -108,6 +137,7 @@ public class MeusFilmes extends Fragment {
                     Filme f = new Filme();
                     f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
                     f.setNome(filme.getProperty(1).toString());
+                    f.setNomeOriginal(filme.getProperty(2).toString());
                     listaFilmes.add(f);
                 }
 
