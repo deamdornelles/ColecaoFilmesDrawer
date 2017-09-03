@@ -12,7 +12,7 @@
     </TextView>
 
     <ListView
+        android:id="@+id/filmes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/filmes"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

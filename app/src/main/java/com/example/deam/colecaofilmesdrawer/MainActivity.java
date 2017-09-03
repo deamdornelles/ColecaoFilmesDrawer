@@ -1,5 +1,6 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    String usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         trocaFragments(R.id.meus_filmes);
+
     }
 
     @Override
@@ -74,6 +78,12 @@ public class MainActivity extends AppCompatActivity
         switch (id) {
             case R.id.meus_filmes:
                 fragment = new MeusFilmes();
+                break;
+            case R.id.sair:
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                MainActivity.this.startActivity(intent);
+
+
                 break;
         }
 

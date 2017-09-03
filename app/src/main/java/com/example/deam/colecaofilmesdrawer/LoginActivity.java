@@ -1,7 +1,9 @@
 package com.example.deam.colecaofilmesdrawer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,11 +34,13 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         loginCadastro = (EditText) findViewById(R.id.loginCadastro);
         senhaCadastro = (EditText) findViewById(R.id.senhaCadastro);
+
     }
 
     public void novaConta(View v) {
@@ -45,9 +49,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void entrar(View v) {
-        LoginActivity.AsyncCallWS task = new LoginActivity.AsyncCallWS();
-        task.execute();
 
+        try {
+            LoginActivity.AsyncCallWS task = new LoginActivity.AsyncCallWS();
+            task.execute();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
