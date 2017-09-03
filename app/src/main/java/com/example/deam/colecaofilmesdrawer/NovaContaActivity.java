@@ -5,8 +5,6 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -25,7 +23,6 @@ public class NovaContaActivity extends AppCompatActivity {
     String retorno;
 
     private final String NAMESPACE = "http://ws/";
-
     private final String URL = "http://192.168.25.204:8080/Banco/CadastraUsuario";
     private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/cadastraUsuario";
     private final String METHOD_NAME = "cadastraUsuario";
@@ -74,16 +71,6 @@ public class NovaContaActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
         }
 
-        public boolean onCreateOptionsMenu(Menu menu) {
-
-            return true;
-        }
-
-        public boolean onOptionsItemSelected(MenuItem item) {
-
-            return true;
-        }
-
         public void getResposta() {
             //Create request
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -112,8 +99,7 @@ public class NovaContaActivity extends AppCompatActivity {
                 retorno = response.toString();
 
             } catch (Exception e) {
-                //Log.w("myApp", e.getMessage());
-                //Log.w("myApp", e.getCause());
+                e.printStackTrace();
             }
         }
     }

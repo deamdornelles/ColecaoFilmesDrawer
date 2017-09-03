@@ -1,14 +1,11 @@
 package com.example.deam.colecaofilmesdrawer;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -28,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     int retorno = 0;
 
     private final String NAMESPACE = "http://ws/";
-
     private final String URL = "http://192.168.25.204:8080/Banco/CadastraUsuario";
     private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/verificaUsuario";
     private final String METHOD_NAME = "verificaUsuario";
@@ -38,19 +34,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         loginCadastro = (EditText) findViewById(R.id.loginCadastro);
         senhaCadastro = (EditText) findViewById(R.id.senhaCadastro);
 
-        shared = getPreferences(Context.MODE_PRIVATE);
+        shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         try {
-            if (!shared.contains("primeiraVez")) {
-                //shared.edit().putBoolean("primeiraVez", true).apply();
+            Boolean teste = shared.getBoolean("primeiraVez", false);
+            if (teste == false) {
+
             } else {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
@@ -87,15 +82,13 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             if (retorno > 0) {
                 shared.edit().putBoolean("primeiraVez", true).apply();
+                shared.edit().putString("usuario", loginCadastro.getText().toString()).apply();
                 Toast.makeText(LoginActivity.this, "Olá " + loginCadastro.getText().toString() + "!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
             } else {
                 Toast.makeText(LoginActivity.this, "Erro no login, tente novamente!!", Toast.LENGTH_SHORT).show();
             }
-            //Toast.makeText(LoginActivity.this, "Olá!!", Toast.LENGTH_SHORT).show();
-            //Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-            //LoginActivity.this.startActivity(intent);
         }
 
         @Override
@@ -104,16 +97,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-        }
-
-        public boolean onCreateOptionsMenu(Menu menu) {
-
-            return true;
-        }
-
-        public boolean onOptionsItemSelected(MenuItem item) {
-
-            return true;
         }
 
         public void getResposta() {
@@ -144,8 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 retorno = Integer.parseInt(response.toString());
 
             } catch (Exception e) {
-                //Log.w("myApp", e.getMessage());
-                //Log.w("myApp", e.getCause());
+                e.printStackTrace();
             }
         }
     }

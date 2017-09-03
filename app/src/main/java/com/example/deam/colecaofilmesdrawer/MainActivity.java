@@ -1,7 +1,9 @@
 package com.example.deam.colecaofilmesdrawer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -13,10 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String usuario;
+    SharedPreferences shared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         trocaFragments(R.id.meus_filmes);
+
+        shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
     }
 
@@ -70,7 +73,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
     private void trocaFragments(int id) {
 
         Fragment fragment = null;
@@ -80,10 +82,9 @@ public class MainActivity extends AppCompatActivity
                 fragment = new MeusFilmes();
                 break;
             case R.id.sair:
+                shared.edit().putBoolean("primeiraVez", false).commit();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 MainActivity.this.startActivity(intent);
-
-
                 break;
         }
 
