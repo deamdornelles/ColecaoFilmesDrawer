@@ -5,33 +5,34 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5px"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_vertical"
-        android:text="TextView" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/detalhes"
+        <CheckBox
+            android:id="@+id/checkBox1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Detalhes" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15px"
+            android:layout_marginBottom="15px"
+            android:buttonTint="@color/laranja"
+            android:text="" />
 
-        <Button
-            android:id="@+id/deletar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Deletar" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="15px"
+            android:layout_marginBottom="15px"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="5px"
+            android:gravity="center_vertical"
+            android:text="TextView" />
 
     </LinearLayout>
 

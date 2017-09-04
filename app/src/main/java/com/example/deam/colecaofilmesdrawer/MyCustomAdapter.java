@@ -5,8 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.CheckBox;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -20,8 +19,6 @@ import java.util.List;
 public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
     private List<Filme> list = new ArrayList<Filme>();
     private Context context;
-
-
 
     public MyCustomAdapter(List<Filme> list, Context context) {
         this.list = list;
@@ -57,11 +54,23 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         TextView listItemText = (TextView)view.findViewById(R.id.textView2);
         listItemText.setText(list.get(position).getNome() + " - " + list.get(position).getAno());
 
-        //Handle buttons and add onClickListeners
-        Button detalhes = (Button) view.findViewById(R.id.detalhes);
-        Button deletar = (Button) view.findViewById(R.id.deletar);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBox1);
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isSelected = ((CheckBox)v).isChecked();
+                list.get(position).setSelected(isSelected);
+            }
+        });
 
-        deletar.setOnClickListener(new View.OnClickListener(){
+
+
+
+        //Handle buttons and add onClickListeners
+        //Button detalhes = (Button) view.findViewById(R.id.detalhes);
+        //Button deletar = (Button) view.findViewById(R.id.deletar);
+
+        /*deletar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 //do something
@@ -76,8 +85,17 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 //do something
                 notifyDataSetChanged();
             }
-        });
+        });*/
 
         return view;
+    }
+
+    public ArrayList<Filme> getFilmes(){
+        ArrayList<Filme> lista = new ArrayList<>();
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).isSelected())
+                lista.add(list.get(i));
+        }
+        return lista;
     }
 }

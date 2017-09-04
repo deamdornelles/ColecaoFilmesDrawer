@@ -9,6 +9,7 @@ public class Filme {
     String nome;
     int ano;
     String nomeOriginal;
+    boolean selected;
 
     public String getNome() {
         return nome;
@@ -32,6 +33,14 @@ public class Filme {
 
     public void setNomeOriginal(String nomeOriginal) {
         this.nomeOriginal = nomeOriginal;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     @Override

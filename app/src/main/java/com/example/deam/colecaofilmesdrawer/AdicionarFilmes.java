@@ -7,13 +7,15 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
@@ -28,49 +30,48 @@ import java.util.List;
  * Created by Deam on 02/09/2017.
  */
 
-public class MeusFilmes extends Fragment {
+public class AdicionarFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaFilme";
-    private final String METHOD_NAME = "buscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilme";
+    private final String METHOD_NAME = "buscaTodosFilmes";
 
     ListView filmes;
     List<Filme> listaFilmes = new ArrayList<Filme>();
 
     SharedPreferences shared;
-
     String usuario;
-
     Fragment fragment = null;
+    Button adicionar;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Meus Filmes");
+        getActivity().setTitle("Adicionar Filmes");
 
-        fragment = new FilmeDetalhes();
+        fragment = new MeusFilmes();
 
-        filmes = (ListView) getView().findViewById(R.id.filmes);
-        filmes.setEmptyView(getView().findViewById(R.id.empty_list_item));
-
-        filmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        adicionar = (Button) getView().findViewById(R.id.adicionar);
+        adicionar.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
+            public void onClick(View v)
+            {
+                ArrayList<Filme> lista = ((MyCustomAdapter)filmes.getAdapter()).getFilmes();
+                Toast.makeText(getActivity(),""+lista.size(),Toast.LENGTH_LONG).show();
 
-                Filme filme = (Filme) parent.getItemAtPosition(position);
-
-                Bundle args = new Bundle();
-                args.putString("nome", filme.getNome());
-                args.putString("nomeOriginal", filme.getNomeOriginal());
-                fragment.setArguments(args);
-
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_main, fragment).addToBackStack(null);
-                ft.commit();
             }
         });
+
+        filmes = (ListView) getView().findViewById(R.id.filmes);
+
+        /*filmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //view.setBackgroundColor(getResources().getColor(R.color.laranja));
+            }
+        });*/
 
         AsyncCallWS task = new AsyncCallWS();
         task.execute();
@@ -84,7 +85,11 @@ public class MeusFilmes extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.meus_filmes, container, false);
+        return inflater.inflate(R.layout.adicionar_filmes, container, false);
+    }
+
+    public void adicionarFilmes(View v) {
+
     }
 
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
@@ -97,11 +102,11 @@ public class MeusFilmes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            filmes.setAdapter(arrayAdapter);
+            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
+            //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
-            //filmes.setAdapter(adapter);
+            MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            filmes.setAdapter(adapter);
 
         }
 
@@ -140,7 +145,6 @@ public class MeusFilmes extends Fragment {
                     f.setNome(filme.getProperty(1).toString());
                     f.setNomeOriginal(filme.getProperty(2).toString());
                     listaFilmes.add(f);
-                    Log.d("Nome do filme: ", listaFilmes.get(i).getNome());
                 }
 
             } catch (Exception e) {
