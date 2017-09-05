@@ -35,7 +35,9 @@ public class AdicionarFilmes extends Fragment {
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
     private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilme";
+    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/adicionaFilmes";
     private final String METHOD_NAME = "buscaTodosFilmes";
+    private final String METHOD_NAME2 = "adicionaFilmes";
 
     ListView filmes;
     List<Filme> listaFilmes = new ArrayList<Filme>();
@@ -58,8 +60,8 @@ public class AdicionarFilmes extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ArrayList<Filme> lista = ((MyCustomAdapter)filmes.getAdapter()).getFilmes();
-                Toast.makeText(getActivity(),""+lista.size(),Toast.LENGTH_LONG).show();
+                    ArrayList<Filme> lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
+                    Toast.makeText(getActivity(), "" + lista.size(), Toast.LENGTH_LONG).show();
 
             }
         });
@@ -88,9 +90,7 @@ public class AdicionarFilmes extends Fragment {
         return inflater.inflate(R.layout.adicionar_filmes, container, false);
     }
 
-    public void adicionarFilmes(View v) {
 
-    }
 
     private class AsyncCallWS extends AsyncTask<String, Void, Void> {
         @Override
@@ -146,6 +146,72 @@ public class AdicionarFilmes extends Fragment {
                     f.setNomeOriginal(filme.getProperty(2).toString());
                     listaFilmes.add(f);
                 }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class AsyncCallWS2 extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+
+            getResposta();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
+            //filmes.setAdapter(arrayAdapter);
+
+            MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            filmes.setAdapter(adapter);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+
+        public void getResposta() {
+            //Create request
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME2);
+
+
+
+            PropertyInfo login = new PropertyInfo();
+            login.type = PropertyInfo.STRING_CLASS;
+            login.setValue(usuario);
+            login.setName("login");
+            login.setType((String.class));
+            request.addProperty(login);
+
+
+
+            listaFilmes.clear();
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.setOutputSoapObject(request);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+            try {
+                androidHttpTransport.call(SOAP_ACTION2, envelope);
+
+                //SoapObject response = (SoapObject)envelope.bodyIn;
+
+                /*for (int i = 0; i < response.getPropertyCount(); i++) {
+                    SoapObject filme = (SoapObject) response.getProperty(i);
+                    Filme f = new Filme();
+                    f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
+                    f.setNome(filme.getProperty(1).toString());
+                    f.setNomeOriginal(filme.getProperty(2).toString());
+                    listaFilmes.add(f);
+                }*/
 
             } catch (Exception e) {
                 e.printStackTrace();
