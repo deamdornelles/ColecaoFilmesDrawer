@@ -46,6 +46,7 @@ public class AdicionarFilmes extends Fragment {
     String usuario;
     Fragment fragment = null;
     Button adicionar;
+    ArrayList<Filme> lista;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -60,8 +61,17 @@ public class AdicionarFilmes extends Fragment {
             @Override
             public void onClick(View v)
             {
-                    ArrayList<Filme> lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
+                    lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
+                if (lista.size() > 0) {
                     Toast.makeText(getActivity(), "" + lista.size(), Toast.LENGTH_LONG).show();
+
+                    AsyncCallWS2 task = new AsyncCallWS2();
+                    task.execute();
+                } else {
+                    Toast.makeText(getActivity(), "Você precisa marcar no mínimo um filme para adicionar", Toast.LENGTH_LONG).show();
+                }
+
+
 
             }
         });
@@ -182,8 +192,27 @@ public class AdicionarFilmes extends Fragment {
         public void getResposta() {
             //Create request
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME2);
+            String filmesArray = "";
+
+            for (int i = 0; i < lista.size(); i++) {
+
+                for (int j = 0; j < listaFilmes.size(); j++) {
+                    if (lista.get(i).getNome().equals(listaFilmes.get(j).getNome())) {
+                        listaFilmes.remove(i);
+                    }
+                }
+
+                //filmesArray.add(lista.get(i).getNome());
+                filmesArray = filmesArray + lista.get(i).getNome() + ",";
+            }
 
 
+            PropertyInfo filmes = new PropertyInfo();
+            filmes.type = PropertyInfo.STRING_CLASS;
+            filmes.setValue(filmesArray);
+            filmes.setName("filmes");
+            filmes.setType((String.class));
+            request.addProperty(filmes);
 
             PropertyInfo login = new PropertyInfo();
             login.type = PropertyInfo.STRING_CLASS;
@@ -192,9 +221,7 @@ public class AdicionarFilmes extends Fragment {
             login.setType((String.class));
             request.addProperty(login);
 
-
-
-            listaFilmes.clear();
+            //listaFilmes.clear();
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
