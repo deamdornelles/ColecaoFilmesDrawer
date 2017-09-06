@@ -44,12 +44,12 @@ public class NovaContaActivity extends AppCompatActivity {
             senhaCadastro.setError("Informe a senha");
             return;
         } else {
-            NovaContaActivity.AsyncCallWS task = new NovaContaActivity.AsyncCallWS();
+            NovaContaActivity.AsyncCallWSCadastraUsuario task = new NovaContaActivity.AsyncCallWSCadastraUsuario();
             task.execute();
         }
     }
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSCadastraUsuario extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             getResposta();

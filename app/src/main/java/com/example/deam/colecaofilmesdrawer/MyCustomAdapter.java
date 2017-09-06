@@ -63,30 +63,6 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
             }
         });
 
-
-
-
-        //Handle buttons and add onClickListeners
-        //Button detalhes = (Button) view.findViewById(R.id.detalhes);
-        //Button deletar = (Button) view.findViewById(R.id.deletar);
-
-        /*deletar.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-                list.remove(position); //or some other task
-                notifyDataSetChanged();
-            }
-        });
-
-        detalhes.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //do something
-                notifyDataSetChanged();
-            }
-        });*/
-
         return view;
     }
 

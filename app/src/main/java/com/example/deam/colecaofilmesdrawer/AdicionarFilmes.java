@@ -34,7 +34,7 @@ public class AdicionarFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilmes";
     private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/adicionaFilmes";
     private final String METHOD_NAME = "buscaTodosFilmes";
     private final String METHOD_NAME2 = "adicionaFilmes";
@@ -65,7 +65,7 @@ public class AdicionarFilmes extends Fragment {
                 if (lista.size() > 0) {
                     Toast.makeText(getActivity(), "" + lista.size(), Toast.LENGTH_LONG).show();
 
-                    AsyncCallWS2 task = new AsyncCallWS2();
+                    AsyncCallWSAdicionaFilmes task = new AsyncCallWSAdicionaFilmes();
                     task.execute();
                 } else {
                     Toast.makeText(getActivity(), "Você precisa marcar no mínimo um filme para adicionar", Toast.LENGTH_LONG).show();
@@ -85,7 +85,7 @@ public class AdicionarFilmes extends Fragment {
             }
         });*/
 
-        AsyncCallWS task = new AsyncCallWS();
+        AsyncCallWSBuscaTodosFilmes task = new AsyncCallWSBuscaTodosFilmes();
         task.execute();
 
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -102,7 +102,7 @@ public class AdicionarFilmes extends Fragment {
 
 
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSBuscaTodosFilmes extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -152,8 +152,9 @@ public class AdicionarFilmes extends Fragment {
                     SoapObject filme = (SoapObject) response.getProperty(i);
                     Filme f = new Filme();
                     f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
-                    f.setNome(filme.getProperty(1).toString());
-                    f.setNomeOriginal(filme.getProperty(2).toString());
+                    f.setId(filme.getProperty(1).toString());
+                    f.setNome(filme.getProperty(2).toString());
+                    f.setNomeOriginal(filme.getProperty(3).toString());
                     listaFilmes.add(f);
                 }
 
@@ -163,7 +164,7 @@ public class AdicionarFilmes extends Fragment {
         }
     }
 
-    private class AsyncCallWS2 extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSAdicionaFilmes extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -203,7 +204,7 @@ public class AdicionarFilmes extends Fragment {
                 }
 
                 //filmesArray.add(lista.get(i).getNome());
-                filmesArray = filmesArray + lista.get(i).getNome() + ",";
+                filmesArray = filmesArray + lista.get(i).getId() + ",";
             }
 
 

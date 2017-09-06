@@ -18,6 +18,7 @@ import android.widget.ListView;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -62,8 +63,10 @@ public class MeusFilmes extends Fragment {
                 Filme filme = (Filme) parent.getItemAtPosition(position);
 
                 Bundle args = new Bundle();
+                args.clear();
                 args.putString("nome", filme.getNome());
                 args.putString("nomeOriginal", filme.getNomeOriginal());
+                args.putString("atores", filme.getAtores());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -72,7 +75,7 @@ public class MeusFilmes extends Fragment {
             }
         });
 
-        AsyncCallWS task = new AsyncCallWS();
+        AsyncCallWSBuscaFilme task = new AsyncCallWSBuscaFilme();
         task.execute();
 
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -87,7 +90,7 @@ public class MeusFilmes extends Fragment {
         return inflater.inflate(R.layout.meus_filmes, container, false);
     }
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSBuscaFilme extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -137,10 +140,11 @@ public class MeusFilmes extends Fragment {
                     SoapObject filme = (SoapObject) response.getProperty(i);
                     Filme f = new Filme();
                     f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
-                    f.setNome(filme.getProperty(1).toString());
-                    f.setNomeOriginal(filme.getProperty(2).toString());
+                    f.setAtores(filme.getProperty(1).toString());
+                    f.setId(filme.getProperty(2).toString());
+                    f.setNome(filme.getProperty(3).toString());
+                    f.setNomeOriginal(filme.getProperty(4).toString());
                     listaFilmes.add(f);
-                    Log.d("Nome do filme: ", listaFilmes.get(i).getNome());
                 }
 
             } catch (Exception e) {

@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     public void entrar(View v) {
 
         try {
-            LoginActivity.AsyncCallWS task = new LoginActivity.AsyncCallWS();
+            LoginActivity.AsyncCallWSVerificaUsuario task = new LoginActivity.AsyncCallWSVerificaUsuario();
             task.execute();
 
         } catch (Exception e) {
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private class AsyncCallWS extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSVerificaUsuario extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
             getResposta();

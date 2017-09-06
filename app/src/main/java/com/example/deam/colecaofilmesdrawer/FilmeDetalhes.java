@@ -16,12 +16,16 @@ public class FilmeDetalhes extends Fragment {
 
     TextView nomeFilme;
     TextView nomeOriginal;
+    TextView elenco;
+    String concatenada;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         nomeFilme = (TextView) getView().findViewById(R.id.nomeFilme);
         nomeOriginal = (TextView) getView().findViewById(R.id.nomeOriginal);
+        elenco = (TextView) getView().findViewById(R.id.elenco);
+
 
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Detalhes");
@@ -29,6 +33,8 @@ public class FilmeDetalhes extends Fragment {
         Bundle b = getArguments();
         nomeFilme.setText(b.getString("nome"));
         nomeOriginal.setText(b.getString("nomeOriginal"));
+        elenco.setText(b.getString("atores"));
+
     }
 
     @Nullable

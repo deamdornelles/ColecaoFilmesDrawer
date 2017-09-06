@@ -1,5 +1,8 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Deam on 02/09/2017.
  */
@@ -10,6 +13,8 @@ public class Filme {
     int ano;
     String nomeOriginal;
     boolean selected;
+    String id;
+    String atores;
 
     public String getNome() {
         return nome;
@@ -41,6 +46,23 @@ public class Filme {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
+    public String getAtores() {
+        return atores;
+    }
+
+    public void setAtores(String atores) {
+        this.atores = atores;
     }
 
     @Override
