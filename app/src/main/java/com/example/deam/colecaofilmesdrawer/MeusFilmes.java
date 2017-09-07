@@ -67,6 +67,8 @@ public class MeusFilmes extends Fragment {
                 args.putString("nome", filme.getNome());
                 args.putString("nomeOriginal", filme.getNomeOriginal());
                 args.putString("atores", filme.getAtores());
+                args.putString("diretores", filme.getDiretores());
+                args.putString("generos", filme.getGeneros());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -141,9 +143,11 @@ public class MeusFilmes extends Fragment {
                     Filme f = new Filme();
                     f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
                     f.setAtores(filme.getProperty(1).toString());
-                    f.setId(filme.getProperty(2).toString());
-                    f.setNome(filme.getProperty(3).toString());
-                    f.setNomeOriginal(filme.getProperty(4).toString());
+                    f.setDiretores(filme.getProperty(2).toString());
+                    f.setGeneros(filme.getProperty(3).toString());
+                    f.setId(filme.getProperty(4).toString());
+                    f.setNome(filme.getProperty(5).toString());
+                    f.setNomeOriginal(filme.getProperty(6).toString());
                     listaFilmes.add(f);
                 }
 

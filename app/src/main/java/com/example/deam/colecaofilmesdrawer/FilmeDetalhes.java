@@ -17,7 +17,9 @@ public class FilmeDetalhes extends Fragment {
     TextView nomeFilme;
     TextView nomeOriginal;
     TextView elenco;
-    String concatenada;
+    TextView diretor;
+    TextView genero;
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -25,6 +27,8 @@ public class FilmeDetalhes extends Fragment {
         nomeFilme = (TextView) getView().findViewById(R.id.nomeFilme);
         nomeOriginal = (TextView) getView().findViewById(R.id.nomeOriginal);
         elenco = (TextView) getView().findViewById(R.id.elenco);
+        diretor = (TextView) getView().findViewById(R.id.diretor);
+        genero = (TextView) getView().findViewById(R.id.genero);
 
 
         super.onViewCreated(view, savedInstanceState);
@@ -34,6 +38,8 @@ public class FilmeDetalhes extends Fragment {
         nomeFilme.setText(b.getString("nome"));
         nomeOriginal.setText(b.getString("nomeOriginal"));
         elenco.setText(b.getString("atores"));
+        diretor.setText(b.getString("diretores"));
+        genero.setText(b.getString("generos"));
 
     }
 
