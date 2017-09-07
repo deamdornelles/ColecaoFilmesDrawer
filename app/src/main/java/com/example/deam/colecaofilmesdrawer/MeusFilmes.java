@@ -1,5 +1,6 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +47,8 @@ public class MeusFilmes extends Fragment {
 
     Fragment fragment = null;
 
+    ProgressDialog pd;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,9 +70,12 @@ public class MeusFilmes extends Fragment {
                 args.clear();
                 args.putString("nome", filme.getNome());
                 args.putString("nomeOriginal", filme.getNomeOriginal());
-                args.putString("atores", filme.getAtores());
-                args.putString("diretores", filme.getDiretores());
-                args.putString("generos", filme.getGeneros());
+                args.putString("atores", filme.getAtores().substring(0, filme.getAtores().lastIndexOf(",")));
+                args.putString("diretores", filme.getDiretores().substring(0, filme.getDiretores().lastIndexOf(",")));
+                args.putString("generos", filme.getGeneros().substring(0, filme.getGeneros().lastIndexOf(",")));
+                args.putInt("ano", filme.getAno());
+                args.putString("id", filme.getId());
+                //args.putByteArray("imagem", filme.getImagem());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -102,8 +109,10 @@ public class MeusFilmes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
+            pd.dismiss();
             ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             filmes.setAdapter(arrayAdapter);
+
 
             //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             //filmes.setAdapter(adapter);
@@ -112,10 +121,14 @@ public class MeusFilmes extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            pd = new ProgressDialog(getActivity());
+            pd.setMessage("Carregando filmes");
+            pd.show();
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
+
         }
 
         public void getResposta() {
@@ -141,13 +154,14 @@ public class MeusFilmes extends Fragment {
                 for (int i = 0; i < response.getPropertyCount(); i++) {
                     SoapObject filme = (SoapObject) response.getProperty(i);
                     Filme f = new Filme();
-                    f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
-                    f.setAtores(filme.getProperty(1).toString());
-                    f.setDiretores(filme.getProperty(2).toString());
-                    f.setGeneros(filme.getProperty(3).toString());
-                    f.setId(filme.getProperty(4).toString());
-                    f.setNome(filme.getProperty(5).toString());
-                    f.setNomeOriginal(filme.getProperty(6).toString());
+                    f.setAno(Integer.parseInt(filme.getProperty("ano").toString()));
+                    f.setAtores(filme.getProperty("atores").toString());
+                    f.setDiretores(filme.getProperty("diretores").toString());
+                    f.setGeneros(filme.getProperty("generos").toString());
+                    f.setId(filme.getProperty("id").toString());
+                    //f.setImagem(Base64.decode(filme.getProperty("imagem").toString().getBytes(), Base64.DEFAULT));
+                    f.setNome(filme.getProperty("nome").toString());
+                    f.setNomeOriginal(filme.getProperty("nomeOriginal").toString());
                     listaFilmes.add(f);
                 }
 

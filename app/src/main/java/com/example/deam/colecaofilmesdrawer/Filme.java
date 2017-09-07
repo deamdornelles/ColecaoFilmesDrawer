@@ -17,6 +17,7 @@ public class Filme {
     String atores;
     String diretores;
     String generos;
+    byte[] imagem;
 
     public String getNome() {
         return nome;
@@ -81,6 +82,14 @@ public class Filme {
 
     public void setGeneros(String generos) {
         this.generos = generos;
+    }
+
+    public byte[] getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(byte[] imagem) {
+        this.imagem = imagem;
     }
 
     @Override

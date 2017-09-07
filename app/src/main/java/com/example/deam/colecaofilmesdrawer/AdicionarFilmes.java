@@ -63,15 +63,17 @@ public class AdicionarFilmes extends Fragment {
             {
                     lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
                 if (lista.size() > 0) {
-                    Toast.makeText(getActivity(), "" + lista.size(), Toast.LENGTH_LONG).show();
+                    if (lista.size() == 1) {
+                        Toast.makeText(getActivity(), lista.size() + " filme adicionado", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), lista.size() + " filmes adicionados", Toast.LENGTH_SHORT).show();
+                    }
 
                     AsyncCallWSAdicionaFilmes task = new AsyncCallWSAdicionaFilmes();
                     task.execute();
                 } else {
                     Toast.makeText(getActivity(), "Você precisa marcar no mínimo um filme para adicionar", Toast.LENGTH_LONG).show();
                 }
-
-
 
             }
         });
