@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.meus_anuncios:
                 fragment = new MeusAnuncios();
                 break;
+            case R.id.anuncios:
+                fragment = new Anuncios();
+                break;
             case R.id.sair:
                 shared.edit().putBoolean("primeiraVez", false).commit();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);

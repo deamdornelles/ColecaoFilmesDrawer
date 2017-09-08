@@ -220,7 +220,6 @@ public class AdicionarFilmes extends Fragment {
                 filmesArray = filmesArray + lista.get(i).getId() + ",";
             }
 
-
             PropertyInfo filmes = new PropertyInfo();
             filmes.type = PropertyInfo.STRING_CLASS;
             filmes.setValue(filmesArray);

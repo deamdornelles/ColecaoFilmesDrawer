@@ -15,6 +15,7 @@
     <AutoCompleteTextView
         android:id="@+id/procura"
         android:hint="Procurar nome do filme..."
+        android:completionThreshold="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

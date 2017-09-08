@@ -29,12 +29,12 @@ import java.util.List;
  * Created by Deam on 07/09/2017.
  */
 
-public class MeusAnuncios extends Fragment {
+public class Anuncios extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaAnuncio";
-    private final String METHOD_NAME = "buscaAnuncio";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosAnuncios";
+    private final String METHOD_NAME = "buscaTodosAnuncios";
 
     ProgressDialog pd;
 
@@ -51,9 +51,9 @@ public class MeusAnuncios extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Meus Anúncios");
+        getActivity().setTitle("Anúncios");
 
-        fragment = new AnuncioDetalhes();
+        fragment = new AnunciosDetalhes();
 
         procura = (AutoCompleteTextView) getView().findViewById(R.id.procura);
 
@@ -73,6 +73,7 @@ public class MeusAnuncios extends Fragment {
                 args.putString("nome", anuncio.getNomeFilme());
                 args.putString("id", anuncio.getId());
                 args.putString("id_filme", anuncio.getId_filme());
+                args.putString("nome_usuario", anuncio.getNome_usuario());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -91,7 +92,7 @@ public class MeusAnuncios extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.meus_anuncios, container, false);
+        return inflater.inflate(R.layout.anuncios, container, false);
     }
 
     private class AsyncCallWSBuscaAnuncio extends AsyncTask<String, Void, Void> {
@@ -154,6 +155,7 @@ public class MeusAnuncios extends Fragment {
                     a.setDescricao(anuncio.getProperty("descricao").toString());
                     a.setNomeFilme(anuncio.getProperty("nomeFilme").toString());
                     a.setId_filme(anuncio.getProperty("id_filme").toString());
+                    a.setNome_usuario(anuncio.getProperty("nome_usuario").toString());
                     listaAnuncios.add(a);
                 }
 

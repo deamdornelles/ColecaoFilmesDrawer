@@ -3,6 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clique no anúncio para ver detalhes" />
+
     <AutoCompleteTextView
         android:id="@+id/procura"
         android:hint="Procurar nome do filme..."
@@ -10,16 +16,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-
-    <Button
-        android:id="@+id/adicionar"
+    <TextView
+        android:id="@+id/empty_list_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Adicionar" />
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:text="Nenhum anúncio encontrado!!" >
+    </TextView>
 
     <ListView
-        android:id="@+id/filmes"
+        android:id="@+id/anuncios"
         android:layout_width="match_parent"
-        android:choiceMode="multipleChoice"
         android:layout_height="match_parent" />
 </LinearLayout>

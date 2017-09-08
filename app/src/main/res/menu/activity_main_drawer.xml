@@ -13,6 +13,9 @@
         <item
             android:id="@+id/meus_anuncios"
             android:title="Meus Anúncios" />
+        <item
+            android:id="@+id/anuncios"
+            android:title="Anúncios de Filmes" />
             <!-- android:icon="@drawable/ic_menu_gallery" -->
         <item
             android:id="@+id/sair"
