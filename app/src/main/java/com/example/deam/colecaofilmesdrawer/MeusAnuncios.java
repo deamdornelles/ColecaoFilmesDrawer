@@ -8,8 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.widget.ListView;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -28,54 +25,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Deam on 02/09/2017.
+ * Created by Deam on 07/09/2017.
  */
 
-public class MeusFilmes extends Fragment {
+public class MeusAnuncios extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaFilme";
-    private final String METHOD_NAME = "buscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaAnuncio";
+    private final String METHOD_NAME = "buscaAnuncio";
 
-    ListView filmes;
-    List<Filme> listaFilmes = new ArrayList<Filme>();
+    ProgressDialog pd;
+
+    List<Anuncio> listaAnuncios = new ArrayList<Anuncio>();
+    ListView anuncios;
 
     SharedPreferences shared;
     String usuario;
 
     Fragment fragment = null;
 
-    ProgressDialog pd;
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Meus Filmes");
+        getActivity().setTitle("Meus Anúncios");
 
-        fragment = new FilmeDetalhes();
+        fragment = new AnuncioDetalhes();
 
-        filmes = (ListView) getView().findViewById(R.id.filmes);
-        filmes.setEmptyView(getView().findViewById(R.id.empty_list_item));
+        anuncios = (ListView) getView().findViewById(R.id.anuncios);
+        anuncios.setEmptyView(getView().findViewById(R.id.empty_list_item));
 
-        filmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        anuncios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
 
-                Filme filme = (Filme) parent.getItemAtPosition(position);
+                Anuncio anuncio = (Anuncio) parent.getItemAtPosition(position);
 
                 Bundle args = new Bundle();
                 args.clear();
-                args.putString("nome", filme.getNome());
-                args.putString("nomeOriginal", filme.getNomeOriginal());
-                args.putString("atores", filme.getAtores().substring(0, filme.getAtores().lastIndexOf(",")));
-                args.putString("diretores", filme.getDiretores().substring(0, filme.getDiretores().lastIndexOf(",")));
-                args.putString("generos", filme.getGeneros().substring(0, filme.getGeneros().lastIndexOf(",")));
-                args.putInt("ano", filme.getAno());
-                args.putString("id", filme.getId());
-                args.putBoolean("anunciado", filme.isAnunciado());
-                //args.putByteArray("imagem", filme.getImagem());
+                args.putString("descricao", anuncio.getDescricao());
+                args.putString("nome", anuncio.getNomeFilme());
+                args.putString("id", anuncio.getId());
+                args.putString("id_filme", anuncio.getId_filme());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -84,21 +76,20 @@ public class MeusFilmes extends Fragment {
             }
         });
 
-        AsyncCallWSBuscaFilme task = new AsyncCallWSBuscaFilme();
-        task.execute();
-
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         usuario = shared.getString("usuario", null);
 
+        AsyncCallWSBuscaAnuncio task = new AsyncCallWSBuscaAnuncio();
+        task.execute();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.meus_filmes, container, false);
+        return inflater.inflate(R.layout.meus_anuncios, container, false);
     }
 
-    private class AsyncCallWSBuscaFilme extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSBuscaAnuncio extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -109,8 +100,8 @@ public class MeusFilmes extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             pd.dismiss();
-            ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            filmes.setAdapter(arrayAdapter);
+            ArrayAdapter<Anuncio> arrayAdapter = new ArrayAdapter<Anuncio>(getContext(), android.R.layout.simple_list_item_1, listaAnuncios);
+            anuncios.setAdapter(arrayAdapter);
 
 
             //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
@@ -121,7 +112,7 @@ public class MeusFilmes extends Fragment {
         @Override
         protected void onPreExecute() {
             pd = new ProgressDialog(getActivity());
-            pd.setMessage("Carregando filmes");
+            pd.setMessage("Carregando anúncios");
             pd.show();
         }
 
@@ -141,7 +132,7 @@ public class MeusFilmes extends Fragment {
             login.setType((String.class));
             request.addProperty(login);
 
-            listaFilmes.clear();
+            listaAnuncios.clear();
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
@@ -151,18 +142,13 @@ public class MeusFilmes extends Fragment {
                 SoapObject response = (SoapObject)envelope.bodyIn;
 
                 for (int i = 0; i < response.getPropertyCount(); i++) {
-                    SoapObject filme = (SoapObject) response.getProperty(i);
-                    Filme f = new Filme();
-                    f.setAno(Integer.parseInt(filme.getProperty("ano").toString()));
-                    f.setAtores(filme.getProperty("atores").toString());
-                    f.setDiretores(filme.getProperty("diretores").toString());
-                    f.setGeneros(filme.getProperty("generos").toString());
-                    f.setId(filme.getProperty("id").toString());
-                    //f.setImagem(Base64.decode(filme.getProperty("imagem").toString().getBytes(), Base64.DEFAULT));
-                    f.setNome(filme.getProperty("nome").toString());
-                    f.setNomeOriginal(filme.getProperty("nomeOriginal").toString());
-                    f.setAnunciado(Boolean.valueOf(filme.getProperty("anunciado").toString()));
-                    listaFilmes.add(f);
+                    SoapObject anuncio = (SoapObject) response.getProperty(i);
+                    Anuncio a = new Anuncio();
+                    a.setId(anuncio.getProperty("id").toString());
+                    a.setDescricao(anuncio.getProperty("descricao").toString());
+                    a.setNomeFilme(anuncio.getProperty("nomeFilme").toString());
+                    a.setId_filme(anuncio.getProperty("id_filme").toString());
+                    listaAnuncios.add(a);
                 }
 
             } catch (Exception e) {

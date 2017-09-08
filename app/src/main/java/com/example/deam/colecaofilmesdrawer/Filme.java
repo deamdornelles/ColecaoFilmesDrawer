@@ -18,6 +18,7 @@ public class Filme {
     String diretores;
     String generos;
     byte[] imagem;
+    boolean anunciado;
 
     public String getNome() {
         return nome;
@@ -59,7 +60,6 @@ public class Filme {
         this.id = id;
     }
 
-
     public String getAtores() {
         return atores;
     }
@@ -90,6 +90,14 @@ public class Filme {
 
     public void setImagem(byte[] imagem) {
         this.imagem = imagem;
+    }
+
+    public boolean isAnunciado() {
+        return anunciado;
+    }
+
+    public void setAnunciado(boolean anunciado) {
+        this.anunciado = anunciado;
     }
 
     @Override

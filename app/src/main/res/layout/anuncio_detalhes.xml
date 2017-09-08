@@ -56,7 +56,7 @@
 
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 
         <LinearLayout
@@ -64,16 +64,23 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/salvar"
+                android:id="@+id/atualizar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cadastrar Anúncio" />
+                android:text="Atualizar Anúncio" />
+
+            <Button
+                android:id="@+id/remover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="REMOVER ANÚNCIO" />
         </LinearLayout>
 
     </LinearLayout>
+
 
 
 

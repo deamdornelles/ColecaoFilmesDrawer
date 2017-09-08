@@ -153,10 +153,10 @@ public class AdicionarFilmes extends Fragment {
                 for (int i = 0; i < response.getPropertyCount(); i++) {
                     SoapObject filme = (SoapObject) response.getProperty(i);
                     Filme f = new Filme();
-                    f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
-                    f.setId(filme.getProperty(1).toString());
-                    f.setNome(filme.getProperty(2).toString());
-                    f.setNomeOriginal(filme.getProperty(3).toString());
+                    f.setAno(Integer.parseInt(filme.getProperty("ano").toString()));
+                    f.setId(filme.getProperty("id").toString());
+                    f.setNome(filme.getProperty("nome").toString());
+                    f.setNomeOriginal(filme.getProperty("nomeOriginal").toString());
                     listaFilmes.add(f);
                 }
 

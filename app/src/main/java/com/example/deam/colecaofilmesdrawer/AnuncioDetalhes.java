@@ -1,26 +1,22 @@
 package com.example.deam.colecaofilmesdrawer;
 
-import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.MarshalBase64;
@@ -30,78 +26,71 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
-import java.io.ByteArrayOutputStream;
-
 /**
- * Created by Deam on 03/09/2017.
+ * Created by Deam on 07/09/2017.
  */
 
-public class FilmeDetalhes extends Fragment {
-
-    /*private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/salvaImagem";
-    private final String METHOD_NAME = "salvaImagem";*/
+public class AnuncioDetalhes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/removeFilme";
-    private final String METHOD_NAME = "removeFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/atualizaAnuncio";
+    private final String METHOD_NAME = "atualizaAnuncio";
+    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/removeAnuncio";
+    private final String METHOD_NAME2 = "removeAnuncio";
 
-    String usuario;
-    SharedPreferences shared;
-    //byte[] byteArray;
-    String idFilme;
-    String retorno;
-
-    TextView nomeFilme;
-    TextView nomeOriginal;
-    TextView elenco;
-    TextView diretor;
-    TextView genero;
-    TextView ano;
-    Button vender;
+    EditText descricao;
+    Button atualizar;
     Button remover;
+    TextView nomeFilme;
+    String idAnuncio;
+    String idFilme;
+    int retorno;
+    String retorno2;
 
     Fragment fragment = null;
-    //Button foto;
-    //ImageView imagem;
-    //private static final int CAMERA_REQUEST = 1888;
 
+    SharedPreferences shared;
+    String usuario;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Detalhes");
 
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         usuario = shared.getString("usuario", null);
 
-        nomeFilme = (TextView) getView().findViewById(R.id.nomeFilme);
-        nomeOriginal = (TextView) getView().findViewById(R.id.nomeOriginal);
-        elenco = (TextView) getView().findViewById(R.id.elenco);
-        diretor = (TextView) getView().findViewById(R.id.diretor);
-        genero = (TextView) getView().findViewById(R.id.genero);
-        ano = (TextView) getView().findViewById(R.id.ano);
+        fragment = new Fragment();
 
-        vender = (Button) getView().findViewById(R.id.vender);
-        vender.setOnClickListener(new View.OnClickListener() {
+        descricao = (EditText) getView().findViewById(R.id.descricao);
+        nomeFilme = (TextView) getView().findViewById(R.id.nomeFilme);
+
+        Bundle b = getArguments();
+        descricao.setText(b.getString("descricao"));
+        nomeFilme.setText(b.getString("nome"));
+        idAnuncio = b.getString("id");
+        idFilme = b.getString("id_filme");
+
+        atualizar = (Button) getView().findViewById(R.id.atualizar);
+
+        atualizar.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                Bundle args = new Bundle();
-                args.clear();
-                args.putString("nome", nomeFilme.getText().toString());
-                args.putString("id", idFilme);
-
-                fragment = new FilmeVenda();
-                fragment.setArguments(args);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.content_main, fragment).addToBackStack(null);
-                ft.commit();
+                if (TextUtils.isEmpty(descricao.getText().toString())) {
+                    descricao.setError("Informe a descricao");
+                    return;
+                } else {
+                    AsyncCallWSAtualizaAnuncio task = new AsyncCallWSAtualizaAnuncio();
+                    task.execute();
+                }
             }
         });
 
         remover = (Button) getView().findViewById(R.id.remover);
+
         remover.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -109,7 +98,7 @@ public class FilmeDetalhes extends Fragment {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
                 //alertDialog.setTitle("Alert");
-                alertDialog.setMessage("Deseja remover este filme?");
+                alertDialog.setMessage("Deseja remover este anúncio?");
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -119,7 +108,7 @@ public class FilmeDetalhes extends Fragment {
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Sim",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                AsyncCallWSRemoveFilme task = new AsyncCallWSRemoveFilme();
+                                AsyncCallWSRemoveAnuncio task = new AsyncCallWSRemoveAnuncio();
                                 task.execute();
                                 dialog.dismiss();
                             }
@@ -131,69 +120,17 @@ public class FilmeDetalhes extends Fragment {
             }
         });
 
-        //imagem = (ImageView) getView().findViewById(R.id.imagem);
-        //foto = (Button) getView().findViewById(R.id.foto);
-
-        /*foto.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-        });*/
 
 
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Detalhes");
-
-        Bundle b = getArguments();
-        nomeFilme.setText(b.getString("nome"));
-        nomeOriginal.setText(b.getString("nomeOriginal"));
-        elenco.setText(b.getString("atores"));
-        diretor.setText(b.getString("diretores"));
-        genero.setText(b.getString("generos"));
-        ano.setText(String.valueOf(b.getInt("ano")));
-        idFilme = b.getString("id");
-
-        if (b.getBoolean("anunciado")) {
-            vender.setVisibility(View.INVISIBLE);
-        }
-        //Bitmap bitmap = BitmapFactory.decodeByteArray(b.getByteArray("imagem"), 0, b.getByteArray("imagem").length);
-        //imagem.setImageBitmap(bitmap);
     }
-
-    /*@Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST) {
-            if (resultCode == Activity.RESULT_OK) {
-
-                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byteArray = stream.toByteArray();
-
-                // convert byte array to Bitmap
-
-                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                imagem.setImageBitmap(bitmap);
-
-                AsyncCallWSSalvaImagem task = new AsyncCallWSSalvaImagem();
-                task.execute();
-            }
-        }
-    }*/
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.filme_detalhes, container, false);
+        return inflater.inflate(R.layout.anuncio_detalhes, container, false);
     }
 
-
-    /*private class AsyncCallWSSalvaImagem extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSAtualizaAnuncio extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -203,81 +140,13 @@ public class FilmeDetalhes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
-            //filmes.setAdapter(adapter);
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-        }
-
-        public void getResposta() {
-            //Create request
-            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-            PropertyInfo login = new PropertyInfo();
-            login.type = PropertyInfo.STRING_CLASS;
-            login.setValue(usuario);
-            login.setName("login");
-            login.setType((String.class));
-            request.addProperty(login);
-
-            PropertyInfo imagem = new PropertyInfo();
-            //login.type = PropertyInfo.STRING_CLASS;
-            imagem.setValue(byteArray);
-            imagem.setName("imagem");
-            //login.setType((String.class));
-            request.addProperty(imagem);
-
-            PropertyInfo id = new PropertyInfo();
-            id.type = PropertyInfo.STRING_CLASS;
-            id.setValue(idFilme);
-            id.setName("id_filme");
-            id.setType((String.class));
-            request.addProperty(id);
-
-            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            new MarshalBase64().register(envelope);
-            envelope.setOutputSoapObject(request);
-            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
-
-            try {
-                androidHttpTransport.call(SOAP_ACTION, envelope);
-                SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
-                retorno = response.toString();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (retorno == 0) {
+                Toast.makeText(getActivity(), "Anúncio atualizado com sucesso", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Ocorreu um erro ao atualizar o anúncio, tente novamente", Toast.LENGTH_SHORT).show();
             }
-        }
-    }*/
-
-    private class AsyncCallWSRemoveFilme extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... params) {
-
-            getResposta();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-
-            Bundle args = new Bundle();
-            args.clear();
-            args.putString("nome", nomeFilme.getText().toString());
-            args.putString("id", idFilme);
-            fragment.setArguments(args);
-
-            fragment = new MeusFilmes();
+            fragment = new MeusAnuncios();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_main, fragment).addToBackStack(null);
             ft.commit();
@@ -301,19 +170,90 @@ public class FilmeDetalhes extends Fragment {
             //Create request
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-            PropertyInfo login = new PropertyInfo();
-            login.type = PropertyInfo.STRING_CLASS;
-            login.setValue(usuario);
-            login.setName("login");
-            login.setType((String.class));
-            request.addProperty(login);
+            PropertyInfo id = new PropertyInfo();
+            id.type = PropertyInfo.STRING_CLASS;
+            id.setValue(idAnuncio);
+            id.setName("id");
+            id.setType((String.class));
+            request.addProperty(id);
+
+            PropertyInfo descricaoInfo = new PropertyInfo();
+            descricaoInfo.type = PropertyInfo.STRING_CLASS;
+            descricaoInfo.setValue(descricao.getText().toString());
+            descricaoInfo.setName("descricao");
+            descricaoInfo.setType((String.class));
+            request.addProperty(descricaoInfo);
+
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.setOutputSoapObject(request);
+            HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
+
+            try {
+                androidHttpTransport.call(SOAP_ACTION, envelope);
+                SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+                retorno = Integer.parseInt(response.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class AsyncCallWSRemoveAnuncio extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+
+            getResposta();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+            fragment = new MeusAnuncios();
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.replace(R.id.content_main, fragment).addToBackStack(null);
+            ft.commit();
+            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
+            //filmes.setAdapter(arrayAdapter);
+
+            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            //filmes.setAdapter(adapter);
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
+
+        public void getResposta() {
+            //Create request
+            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME2);
 
             PropertyInfo id = new PropertyInfo();
             id.type = PropertyInfo.STRING_CLASS;
-            id.setValue(idFilme);
-            id.setName("id_filme");
+            id.setValue(idAnuncio);
+            id.setName("id_anuncio");
             id.setType((String.class));
             request.addProperty(id);
+
+            PropertyInfo id_filme = new PropertyInfo();
+            id_filme.type = PropertyInfo.STRING_CLASS;
+            id_filme.setValue(idFilme);
+            id_filme.setName("id_filme");
+            id_filme.setType((String.class));
+            request.addProperty(id_filme);
+
+            PropertyInfo usuario_info = new PropertyInfo();
+            usuario_info.type = PropertyInfo.STRING_CLASS;
+            usuario_info.setValue(usuario);
+            usuario_info.setName("nome_usuario");
+            usuario_info.setType((String.class));
+            request.addProperty(usuario_info);
 
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             new MarshalBase64().register(envelope);
@@ -321,9 +261,9 @@ public class FilmeDetalhes extends Fragment {
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
 
             try {
-                androidHttpTransport.call(SOAP_ACTION, envelope);
+                androidHttpTransport.call(SOAP_ACTION2, envelope);
                 SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
-                retorno = response.toString();
+                retorno2 = response.toString();
 
             } catch (Exception e) {
                 e.printStackTrace();

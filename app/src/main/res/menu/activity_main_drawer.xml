@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Adicionar Filmes" />
         <item
+            android:id="@+id/meus_anuncios"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Meus Anúncios" />
+        <item
             android:id="@+id/sair"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Sair" />
