@@ -4,22 +4,19 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/meus_filmes"
-            android:icon="@drawable/ic_menu_camera"
             android:title="Meus Filmes" />
+            <!-- android:icon="@drawable/ic_menu_camera" -->
         <item
             android:id="@+id/adicionar_filmes"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="Adicionar Filmes" />
+            <!-- android:icon="@drawable/ic_menu_gallery" -->
         <item
             android:id="@+id/meus_anuncios"
-            android:icon="@drawable/ic_menu_gallery"
             android:title="Meus Anúncios" />
+            <!-- android:icon="@drawable/ic_menu_gallery" -->
         <item
             android:id="@+id/sair"
-            android:icon="@drawable/ic_menu_slideshow"
             android:title="Sair" />
-
+            <!-- android:icon="@drawable/ic_menu_slideshow" -->
     </group>
-
-
 </menu>

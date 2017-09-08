@@ -271,12 +271,6 @@ public class FilmeDetalhes extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
 
-            Bundle args = new Bundle();
-            args.clear();
-            args.putString("nome", nomeFilme.getText().toString());
-            args.putString("id", idFilme);
-            fragment.setArguments(args);
-
             fragment = new MeusFilmes();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_main, fragment).addToBackStack(null);

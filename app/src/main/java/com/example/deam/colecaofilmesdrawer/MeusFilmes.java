@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import org.ksoap2.SoapEnvelope;
@@ -40,6 +44,7 @@ public class MeusFilmes extends Fragment {
 
     ListView filmes;
     List<Filme> listaFilmes = new ArrayList<Filme>();
+    AutoCompleteTextView procura;
 
     SharedPreferences shared;
     String usuario;
@@ -54,6 +59,9 @@ public class MeusFilmes extends Fragment {
         getActivity().setTitle("Meus Filmes");
 
         fragment = new FilmeDetalhes();
+
+        procura = (AutoCompleteTextView) getView().findViewById(R.id.procura);
+
 
         filmes = (ListView) getView().findViewById(R.id.filmes);
         filmes.setEmptyView(getView().findViewById(R.id.empty_list_item));
@@ -110,6 +118,8 @@ public class MeusFilmes extends Fragment {
         protected void onPostExecute(Void result) {
             pd.dismiss();
             ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
+            procura.setText("");
+            procura.setAdapter(arrayAdapter);
             filmes.setAdapter(arrayAdapter);
 
 

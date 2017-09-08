@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,10 +49,14 @@ public class AdicionarFilmes extends Fragment {
     Button adicionar;
     ArrayList<Filme> lista;
 
+    AutoCompleteTextView procura;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Adicionar Filmes");
+
+        procura = (AutoCompleteTextView) getView().findViewById(R.id.procura);
 
         fragment = new MeusFilmes();
 
@@ -61,7 +66,8 @@ public class AdicionarFilmes extends Fragment {
             @Override
             public void onClick(View v)
             {
-                    lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
+                    //lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
+                lista = ((AdapterCustomizado) filmes.getAdapter()).getFilmes();
                 if (lista.size() > 0) {
                     if (lista.size() == 1) {
                         Toast.makeText(getActivity(), lista.size() + " filme adicionado", Toast.LENGTH_SHORT).show();
@@ -117,7 +123,9 @@ public class AdicionarFilmes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
+            procura.setAdapter(adapter);
             filmes.setAdapter(adapter);
 
         }
@@ -179,7 +187,9 @@ public class AdicionarFilmes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
+            AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
+            procura.setAdapter(adapter);
             filmes.setAdapter(adapter);
 
         }
@@ -201,7 +211,8 @@ public class AdicionarFilmes extends Fragment {
 
                 for (int j = 0; j < listaFilmes.size(); j++) {
                     if (lista.get(i).getNome().equals(listaFilmes.get(j).getNome())) {
-                        listaFilmes.remove(i);
+                        listaFilmes.remove(j);
+                        j--;
                     }
                 }
 
