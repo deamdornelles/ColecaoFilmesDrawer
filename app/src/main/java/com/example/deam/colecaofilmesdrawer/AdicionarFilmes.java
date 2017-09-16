@@ -34,9 +34,9 @@ import java.util.List;
 public class AdicionarFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilmes";
-    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/adicionaFilmes";
+    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaTodosFilmes";
+    private final String SOAP_ACTION2 = "http://192.168.25.211:8080/Banco/BuscaFilme/adicionaFilmes";
     private final String METHOD_NAME = "buscaTodosFilmes";
     private final String METHOD_NAME2 = "adicionaFilmes";
 
@@ -66,7 +66,6 @@ public class AdicionarFilmes extends Fragment {
             @Override
             public void onClick(View v)
             {
-                    //lista = ((MyCustomAdapter) filmes.getAdapter()).getFilmes();
                 lista = ((AdapterCustomizado) filmes.getAdapter()).getFilmes();
                 if (lista.size() > 0) {
                     if (lista.size() == 1) {
@@ -123,7 +122,6 @@ public class AdicionarFilmes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
             procura.setAdapter(adapter);
             filmes.setAdapter(adapter);
@@ -187,7 +185,6 @@ public class AdicionarFilmes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
             procura.setAdapter(adapter);
             filmes.setAdapter(adapter);

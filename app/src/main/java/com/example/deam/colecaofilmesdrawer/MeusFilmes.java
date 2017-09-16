@@ -38,8 +38,8 @@ import java.util.List;
 public class MeusFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaFilme";
+    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaFilme";
     private final String METHOD_NAME = "buscaFilme";
 
     ListView filmes;
@@ -123,7 +123,6 @@ public class MeusFilmes extends Fragment {
             filmes.setAdapter(arrayAdapter);
 
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             //filmes.setAdapter(adapter);
 
         }

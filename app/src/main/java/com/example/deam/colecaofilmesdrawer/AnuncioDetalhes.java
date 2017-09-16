@@ -33,10 +33,10 @@ import org.ksoap2.transport.HttpTransportSE;
 public class AnuncioDetalhes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/atualizaAnuncio";
+    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/atualizaAnuncio";
     private final String METHOD_NAME = "atualizaAnuncio";
-    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/removeAnuncio";
+    private final String SOAP_ACTION2 = "http://192.168.25.211:8080/Banco/BuscaFilme/removeAnuncio";
     private final String METHOD_NAME2 = "removeAnuncio";
 
     EditText descricao;
@@ -153,7 +153,6 @@ public class AnuncioDetalhes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             //filmes.setAdapter(adapter);
 
         }
@@ -217,7 +216,6 @@ public class AnuncioDetalhes extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             //filmes.setAdapter(adapter);
 
         }

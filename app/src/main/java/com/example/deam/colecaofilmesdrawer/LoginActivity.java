@@ -1,5 +1,6 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -22,11 +23,13 @@ public class LoginActivity extends AppCompatActivity {
     EditText loginCadastro;
     EditText senhaCadastro;
 
+    ProgressDialog pd;
+
     int retorno = 0;
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/CadastraUsuario";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/verificaUsuario";
+    private final String URL = "http://192.168.25.211:8080/Banco/CadastraUsuario";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/CadastraUsuario/verificaUsuario";
     private final String METHOD_NAME = "verificaUsuario";
 
     SharedPreferences shared;
@@ -81,18 +84,23 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             if (retorno > 0) {
+                pd.dismiss();
                 shared.edit().putBoolean("primeiraVez", true).apply();
                 shared.edit().putString("usuario", loginCadastro.getText().toString()).apply();
                 Toast.makeText(LoginActivity.this, "Olá " + loginCadastro.getText().toString() + "!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 LoginActivity.this.startActivity(intent);
             } else {
+                pd.dismiss();
                 Toast.makeText(LoginActivity.this, "Erro no login, tente novamente!!", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         protected void onPreExecute() {
+            pd = new ProgressDialog(LoginActivity.this);
+            pd.setMessage("Autenticando");
+            pd.show();
         }
 
         @Override

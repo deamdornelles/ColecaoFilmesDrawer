@@ -1,5 +1,6 @@
 package com.example.deam.colecaofilmesdrawer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +23,11 @@ public class NovaContaActivity extends AppCompatActivity {
     EditText senhaCadastro;
     String retorno;
 
+    ProgressDialog pd;
+
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/CadastraUsuario";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/cadastraUsuario";
+    private final String URL = "http://192.168.25.211:8080/Banco/CadastraUsuario";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/CadastraUsuario/cadastraUsuario";
     private final String METHOD_NAME = "cadastraUsuario";
 
     @Override
@@ -58,6 +61,7 @@ public class NovaContaActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+            pd.dismiss();
             Toast.makeText(NovaContaActivity.this, retorno, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(NovaContaActivity.this, LoginActivity.class);
             NovaContaActivity.this.startActivity(intent);
@@ -65,6 +69,9 @@ public class NovaContaActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
+            pd = new ProgressDialog(NovaContaActivity.this);
+            pd.setMessage("Cadastrando conta");
+            pd.show();
         }
 
         @Override

@@ -43,8 +43,8 @@ public class FilmeVenda extends Fragment {
     Fragment fragment = null;
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/salvaAnuncio";
+    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/salvaAnuncio";
     private final String METHOD_NAME = "salvaAnuncio";
 
     @Override
@@ -112,7 +112,6 @@ public class FilmeVenda extends Fragment {
             //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
             //filmes.setAdapter(arrayAdapter);
 
-            //MyCustomAdapter adapter = new MyCustomAdapter(listaFilmes, getActivity().getApplicationContext());
             //filmes.setAdapter(adapter);
 
         }
