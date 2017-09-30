@@ -32,8 +32,8 @@ import java.util.List;
 public class Anuncios extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaTodosAnuncios";
+    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosAnuncios";
     private final String METHOD_NAME = "buscaTodosAnuncios";
 
     ProgressDialog pd;
@@ -85,7 +85,7 @@ public class Anuncios extends Fragment {
         shared = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         usuario = shared.getString("usuario", null);
 
-        AsyncCallWSBuscaAnuncio task = new AsyncCallWSBuscaAnuncio();
+        AsyncCallWSBuscaTodosAnuncios task = new AsyncCallWSBuscaTodosAnuncios();
         task.execute();
     }
 
@@ -95,7 +95,7 @@ public class Anuncios extends Fragment {
         return inflater.inflate(R.layout.anuncios, container, false);
     }
 
-    private class AsyncCallWSBuscaAnuncio extends AsyncTask<String, Void, Void> {
+    private class AsyncCallWSBuscaTodosAnuncios extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... params) {
 
@@ -109,9 +109,6 @@ public class Anuncios extends Fragment {
             ArrayAdapter<Anuncio> arrayAdapter = new ArrayAdapter<Anuncio>(getContext(), android.R.layout.simple_list_item_1, listaAnuncios);
             procura.setAdapter(arrayAdapter);
             anuncios.setAdapter(arrayAdapter);
-
-
-            //filmes.setAdapter(adapter);
 
         }
 
@@ -128,7 +125,7 @@ public class Anuncios extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo login = new PropertyInfo();

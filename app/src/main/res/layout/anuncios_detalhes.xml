@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Usuário:" />
+                android:text="Usuário: " />
 
             <TextView
                 android:id="@+id/usuario"
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Descrição:" />
+                android:text="Descrição: " />
 
             <TextView
                 android:id="@+id/descricao"

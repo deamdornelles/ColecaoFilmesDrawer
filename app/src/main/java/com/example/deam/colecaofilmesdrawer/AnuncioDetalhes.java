@@ -33,10 +33,10 @@ import org.ksoap2.transport.HttpTransportSE;
 public class AnuncioDetalhes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/atualizaAnuncio";
+    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/atualizaAnuncio";
     private final String METHOD_NAME = "atualizaAnuncio";
-    private final String SOAP_ACTION2 = "http://192.168.25.211:8080/Banco/BuscaFilme/removeAnuncio";
+    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/removeAnuncio";
     private final String METHOD_NAME2 = "removeAnuncio";
 
     EditText descricao;
@@ -46,7 +46,7 @@ public class AnuncioDetalhes extends Fragment {
     String idAnuncio;
     String idFilme;
     int retorno;
-    String retorno2;
+    int retorno2;
 
     Fragment fragment = null;
 
@@ -97,7 +97,6 @@ public class AnuncioDetalhes extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-                //alertDialog.setTitle("Alert");
                 alertDialog.setMessage("Deseja remover este anúncio?");
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar",
                         new DialogInterface.OnClickListener() {
@@ -115,13 +114,8 @@ public class AnuncioDetalhes extends Fragment {
                         });
                 alertDialog.show();
 
-                //Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                //startActivityForResult(cameraIntent, CAMERA_REQUEST);
             }
         });
-
-
-
     }
 
     @Nullable
@@ -150,10 +144,6 @@ public class AnuncioDetalhes extends Fragment {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_main, fragment).addToBackStack(null);
             ft.commit();
-            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            //filmes.setAdapter(arrayAdapter);
-
-            //filmes.setAdapter(adapter);
 
         }
 
@@ -166,7 +156,7 @@ public class AnuncioDetalhes extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo id = new PropertyInfo();
@@ -208,16 +198,15 @@ public class AnuncioDetalhes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-
+            if (retorno2 == 0) {
+                Toast.makeText(getActivity(), "Anúncio removido com sucesso", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "Ocorreu um erro ao remover o anúncio, tente novamente", Toast.LENGTH_SHORT).show();
+            }
             fragment = new MeusAnuncios();
             FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_main, fragment).addToBackStack(null);
             ft.commit();
-            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            //filmes.setAdapter(arrayAdapter);
-
-            //filmes.setAdapter(adapter);
-
         }
 
         @Override
@@ -229,7 +218,7 @@ public class AnuncioDetalhes extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME2);
 
             PropertyInfo id = new PropertyInfo();
@@ -261,7 +250,7 @@ public class AnuncioDetalhes extends Fragment {
             try {
                 androidHttpTransport.call(SOAP_ACTION2, envelope);
                 SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
-                retorno2 = response.toString();
+                retorno2  = Integer.parseInt(response.toString());
 
             } catch (Exception e) {
                 e.printStackTrace();

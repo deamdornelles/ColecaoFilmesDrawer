@@ -1,8 +1,5 @@
 package com.example.deam.colecaofilmesdrawer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Deam on 02/09/2017.
  */
@@ -17,7 +14,6 @@ public class Filme {
     String atores;
     String diretores;
     String generos;
-    byte[] imagem;
     boolean anunciado;
 
     public String getNome() {
@@ -82,14 +78,6 @@ public class Filme {
 
     public void setGeneros(String generos) {
         this.generos = generos;
-    }
-
-    public byte[] getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
     }
 
     public boolean isAnunciado() {

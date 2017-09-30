@@ -6,13 +6,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -21,6 +17,7 @@ import android.widget.Toast;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -34,9 +31,9 @@ import java.util.List;
 public class AdicionarFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaTodosFilmes";
-    private final String SOAP_ACTION2 = "http://192.168.25.211:8080/Banco/BuscaFilme/adicionaFilmes";
+    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosFilmes";
+    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/adicionaFilmes";
     private final String METHOD_NAME = "buscaTodosFilmes";
     private final String METHOD_NAME2 = "adicionaFilmes";
 
@@ -48,6 +45,7 @@ public class AdicionarFilmes extends Fragment {
     Fragment fragment = null;
     Button adicionar;
     ArrayList<Filme> lista;
+    String retorno;
 
     AutoCompleteTextView procura;
 
@@ -68,11 +66,11 @@ public class AdicionarFilmes extends Fragment {
             {
                 lista = ((AdapterCustomizado) filmes.getAdapter()).getFilmes();
                 if (lista.size() > 0) {
-                    if (lista.size() == 1) {
+                    /*if (lista.size() == 1) {
                         Toast.makeText(getActivity(), lista.size() + " filme adicionado", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), lista.size() + " filmes adicionados", Toast.LENGTH_SHORT).show();
-                    }
+                    }*/
 
                     AsyncCallWSAdicionaFilmes task = new AsyncCallWSAdicionaFilmes();
                     task.execute();
@@ -84,13 +82,6 @@ public class AdicionarFilmes extends Fragment {
         });
 
         filmes = (ListView) getView().findViewById(R.id.filmes);
-
-        /*filmes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //view.setBackgroundColor(getResources().getColor(R.color.laranja));
-            }
-        });*/
 
         AsyncCallWSBuscaTodosFilmes task = new AsyncCallWSBuscaTodosFilmes();
         task.execute();
@@ -119,8 +110,6 @@ public class AdicionarFilmes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            //filmes.setAdapter(arrayAdapter);
 
             AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
             procura.setAdapter(adapter);
@@ -137,7 +126,6 @@ public class AdicionarFilmes extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo login = new PropertyInfo();
@@ -182,9 +170,7 @@ public class AdicionarFilmes extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-            //ArrayAdapter<Filme> arrayAdapter = new ArrayAdapter<Filme>(getContext(), android.R.layout.simple_list_item_1, listaFilmes);
-            //filmes.setAdapter(arrayAdapter);
-
+            Toast.makeText(getActivity(), retorno, Toast.LENGTH_SHORT).show();
             AdapterCustomizado adapter = new AdapterCustomizado(getActivity().getApplicationContext(), R.layout.meus_filmes_lista, listaFilmes);
             procura.setAdapter(adapter);
             filmes.setAdapter(adapter);
@@ -200,7 +186,7 @@ public class AdicionarFilmes extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME2);
             String filmesArray = "";
 
@@ -213,7 +199,6 @@ public class AdicionarFilmes extends Fragment {
                     }
                 }
 
-                //filmesArray.add(lista.get(i).getNome());
                 filmesArray = filmesArray + lista.get(i).getId() + ",";
             }
 
@@ -231,24 +216,13 @@ public class AdicionarFilmes extends Fragment {
             login.setType((String.class));
             request.addProperty(login);
 
-            //listaFilmes.clear();
-
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.setOutputSoapObject(request);
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URL);
             try {
                 androidHttpTransport.call(SOAP_ACTION2, envelope);
-
-                //SoapObject response = (SoapObject)envelope.bodyIn;
-
-                /*for (int i = 0; i < response.getPropertyCount(); i++) {
-                    SoapObject filme = (SoapObject) response.getProperty(i);
-                    Filme f = new Filme();
-                    f.setAno(Integer.parseInt(filme.getProperty(0).toString()));
-                    f.setNome(filme.getProperty(1).toString());
-                    f.setNomeOriginal(filme.getProperty(2).toString());
-                    listaFilmes.add(f);
-                }*/
+                SoapPrimitive response = (SoapPrimitive) envelope.getResponse();
+                retorno = response.toString();
 
             } catch (Exception e) {
                 e.printStackTrace();

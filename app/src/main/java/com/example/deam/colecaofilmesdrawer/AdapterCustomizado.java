@@ -20,16 +20,14 @@ import java.util.List;
 
 public class AdapterCustomizado extends ArrayAdapter<Filme> {
 
-    private final Context mContext;
+    private final Context context;
     private final List<Filme> filmes;
     private final List<Filme> filmes_todos;
     private final List<Filme> filmes_sugestao;
-    private final int mLayoutResourceId;
 
     public AdapterCustomizado(@NonNull Context context, @LayoutRes int resource, @NonNull List<Filme> objects) {
         super(context, resource, objects);
-        this.mContext = context;
-        this.mLayoutResourceId = resource;
+        this.context = context;
         this.filmes = new ArrayList<>(objects);
         this.filmes_todos = new ArrayList<>(objects);
         this.filmes_sugestao = new ArrayList<>();
@@ -51,7 +49,7 @@ public class AdapterCustomizado extends ArrayAdapter<Filme> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         try {
             if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.meus_filmes_lista, parent, false);
             }
             TextView listItemText = (TextView)convertView.findViewById(R.id.textView2);

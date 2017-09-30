@@ -26,8 +26,8 @@ public class NovaContaActivity extends AppCompatActivity {
     ProgressDialog pd;
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/CadastraUsuario";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/CadastraUsuario/cadastraUsuario";
+    private final String URL = "http://192.168.25.204:8080/Banco/CadastraUsuario";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/CadastraUsuario/cadastraUsuario";
     private final String METHOD_NAME = "cadastraUsuario";
 
     @Override
@@ -79,7 +79,6 @@ public class NovaContaActivity extends AppCompatActivity {
         }
 
         public void getResposta() {
-            //Create request
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo login = new PropertyInfo();

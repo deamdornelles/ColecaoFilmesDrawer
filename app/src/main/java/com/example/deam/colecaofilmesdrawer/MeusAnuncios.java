@@ -32,8 +32,8 @@ import java.util.List;
 public class MeusAnuncios extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaAnuncio";
+    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaAnuncio";
     private final String METHOD_NAME = "buscaAnuncio";
 
     ProgressDialog pd;
@@ -110,8 +110,6 @@ public class MeusAnuncios extends Fragment {
             anuncios.setAdapter(arrayAdapter);
 
 
-            //filmes.setAdapter(adapter);
-
         }
 
         @Override
@@ -127,7 +125,7 @@ public class MeusAnuncios extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo login = new PropertyInfo();

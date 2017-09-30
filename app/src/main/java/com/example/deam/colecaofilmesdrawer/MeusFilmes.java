@@ -8,23 +8,17 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
@@ -38,8 +32,8 @@ import java.util.List;
 public class MeusFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.211:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.211:8080/Banco/BuscaFilme/buscaFilme";
+    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaFilme";
     private final String METHOD_NAME = "buscaFilme";
 
     ListView filmes;
@@ -83,7 +77,6 @@ public class MeusFilmes extends Fragment {
                 args.putInt("ano", filme.getAno());
                 args.putString("id", filme.getId());
                 args.putBoolean("anunciado", filme.isAnunciado());
-                //args.putByteArray("imagem", filme.getImagem());
                 fragment.setArguments(args);
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -122,9 +115,6 @@ public class MeusFilmes extends Fragment {
             procura.setAdapter(arrayAdapter);
             filmes.setAdapter(arrayAdapter);
 
-
-            //filmes.setAdapter(adapter);
-
         }
 
         @Override
@@ -140,7 +130,7 @@ public class MeusFilmes extends Fragment {
         }
 
         public void getResposta() {
-            //Create request
+
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
             PropertyInfo login = new PropertyInfo();
@@ -167,7 +157,6 @@ public class MeusFilmes extends Fragment {
                     f.setDiretores(filme.getProperty("diretores").toString());
                     f.setGeneros(filme.getProperty("generos").toString());
                     f.setId(filme.getProperty("id").toString());
-                    //f.setImagem(Base64.decode(filme.getProperty("imagem").toString().getBytes(), Base64.DEFAULT));
                     f.setNome(filme.getProperty("nome").toString());
                     f.setNomeOriginal(filme.getProperty("nomeOriginal").toString());
                     f.setAnunciado(Boolean.valueOf(filme.getProperty("anunciado").toString()));
