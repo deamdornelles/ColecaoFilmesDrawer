@@ -33,10 +33,10 @@ import org.ksoap2.transport.HttpTransportSE;
 public class AnuncioDetalhes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/atualizaAnuncio";
+    private final String URL = "http://10.0.2.2:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://10.0.2.2:8080/Banco/BuscaFilme/atualizaAnuncio";
     private final String METHOD_NAME = "atualizaAnuncio";
-    private final String SOAP_ACTION2 = "http://192.168.25.204:8080/Banco/BuscaFilme/removeAnuncio";
+    private final String SOAP_ACTION2 = "http://10.0.2.2:8080/Banco/BuscaFilme/removeAnuncio";
     private final String METHOD_NAME2 = "removeAnuncio";
 
     EditText descricao;

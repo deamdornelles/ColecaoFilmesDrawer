@@ -28,11 +28,12 @@ import org.ksoap2.transport.HttpTransportSE;
  * Created by Deam on 03/09/2017.
  */
 
-public class FilmeDetalhes extends Fragment {
+public class
+FilmeDetalhes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/removeFilme";
+    private final String URL = "http://10.0.2.2:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://10.0.2.2:8080/Banco/BuscaFilme/removeFilme";
     private final String METHOD_NAME = "removeFilme";
 
     String usuario;

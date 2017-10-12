@@ -32,8 +32,8 @@ import java.util.List;
 public class Anuncios extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
-    private final String URL = "http://192.168.25.204:8080/Banco/BuscaFilme";
-    private final String SOAP_ACTION = "http://192.168.25.204:8080/Banco/BuscaFilme/buscaTodosAnuncios";
+    private final String URL = "http://10.0.2.2:8080/Banco/BuscaFilme";
+    private final String SOAP_ACTION = "http://10.0.2.2:8080/Banco/BuscaFilme/buscaTodosAnuncios";
     private final String METHOD_NAME = "buscaTodosAnuncios";
 
     ProgressDialog pd;

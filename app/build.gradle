@@ -17,6 +17,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
 }
 
 dependencies {
@@ -29,4 +33,5 @@ dependencies {
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
+
 }
