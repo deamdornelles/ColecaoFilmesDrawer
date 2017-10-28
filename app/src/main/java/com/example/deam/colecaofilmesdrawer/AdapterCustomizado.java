@@ -63,6 +63,11 @@ public class AdapterCustomizado extends ArrayAdapter<Filme> {
                     filmes.get(position).setSelected(isSelected);
                 }
             });
+            if (filmes.get(position).isSelected()) {
+                checkBox.setChecked(true);
+            } else {
+                checkBox.setChecked(false);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
