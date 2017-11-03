@@ -33,8 +33,11 @@ AdicionarFilmes extends Fragment {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://10.0.2.2:8080/Banco/BuscaFilme";
+    //private final String URL = "http://192.168.25.11:8080/Banco/BuscaFilme";
     private final String SOAP_ACTION = "http://10.0.2.2:8080/Banco/BuscaFilme/buscaTodosFilmes";
+    //private final String SOAP_ACTION = "http://192.168.25.11:8080/Banco/BuscaFilme/buscaTodosFilmes";
     private final String SOAP_ACTION2 = "http://10.0.2.2:8080/Banco/BuscaFilme/adicionaFilmes";
+    //private final String SOAP_ACTION2 = "http://192.168.25.11:8080/Banco/BuscaFilme/adicionaFilmes";
     private final String METHOD_NAME = "buscaTodosFilmes";
     private final String METHOD_NAME2 = "adicionaFilmes";
 

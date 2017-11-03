@@ -51,14 +51,20 @@
             android:layout_marginTop="20dp"
             android:text="Senha" />
 
-        <EditText
-            android:id="@+id/senhaCadastro"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="285dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:ems="10"
-            android:inputType="textPassword"
-            android:text="" />
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/laranja">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:id="@+id/senhaCadastro"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
 
         <Button
             android:id="@+id/button2"

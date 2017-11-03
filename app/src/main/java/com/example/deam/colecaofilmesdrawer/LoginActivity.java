@@ -29,7 +29,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private final String NAMESPACE = "http://ws/";
     private final String URL = "http://10.0.2.2:8080/Banco/CadastraUsuario";
+    //private final String URL = "http://192.168.25.11:8080/Banco/CadastraUsuario";
     private final String SOAP_ACTION = "http://10.0.2.2:8080/Banco/CadastraUsuario/verificaUsuario";
+    //private final String SOAP_ACTION = "http://192.168.25.11:8080/Banco/CadastraUsuario/verificaUsuario";
     private final String METHOD_NAME = "verificaUsuario";
 
     SharedPreferences shared;
